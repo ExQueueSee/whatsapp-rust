@@ -5875,6 +5875,7 @@ dependencies = [
  "log",
  "rcgen",
  "rustls",
+ "rustls-native-certs",
  "tokio",
  "tokio-rustls",
  "tokio-websockets",
@@ -5888,6 +5889,7 @@ version = "0.7.0"
 dependencies = [
  "anyhow",
  "async-trait",
+ "rustls-native-certs",
  "tokio",
  "ureq",
  "wacore",
