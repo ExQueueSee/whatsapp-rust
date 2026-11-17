@@ -178,6 +178,21 @@ fn build_agent() -> ureq::Agent {
         // avoid racing blocking workers that cannot be cancelled on drop.
         .timeout_connect(Some(std::time::Duration::from_secs(10)));
 
+    let native_certs = rustls_native_certs::load_native_certs();
+
+    let native_roots: Vec<ureq::tls::Certificate<'static>> = native_certs
+        .certs
+        .iter()
+        .map(|cert| ureq::tls::Certificate::from_der(cert.as_ref()).to_owned())
+        .collect();
+
+    builder = builder.tls_config(
+        ureq::tls::TlsConfig::builder()
+            .root_certs(ureq::tls::RootCerts::new_with_certs(&native_roots))
+            .build(),
+    );
+
+
     #[cfg(feature = "danger-skip-tls-verify")]
     {
         use ureq::tls::TlsConfig;
